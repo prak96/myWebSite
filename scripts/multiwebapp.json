@@ -1,0 +1,76 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "projectName": {
+            "type": "string",
+            "metadata": {
+                "description": "enter the name of project"
+            }
+        },
+        "appCount": {
+            "type": "int",
+            "metadata": {
+                "description": "enter the no of apps"
+            }
+        }
+        
+        
+    },
+    "functions": [],
+    "variables": {
+        "appPlanName":"[format('ASP-{0}', parameters('projectName'))]",
+        "webAppName": "[format('{0}-webapp', parameters('projectName'))]",
+        "location": "[resourceGroup().location]"  
+
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2022-09-01",
+            "name": "[variables('appPlanName')]",
+            "location": "[variables('location')]",
+            "sku": {
+                "name": "S1",
+                "tier": "Standard",
+                "size": "S1",
+                "family": "S",
+                "capacity": 1
+            },
+            "kind": "Windows",
+            "properties": {
+                "perSiteScaling": false,
+                "elasticScaleEnabled": false,
+                "maximumElasticWorkerCount": 1,
+                "isSpot": false,
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0,
+                "zoneRedundant": false
+            }
+         },
+         {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(variables('webAppName'),copyIndex())]",
+            "location": "[variables('location')]",
+            "copy": {
+                "name": "webAppLoop",
+                "count": "[parameters('appCount')]"
+            },
+            "kind": "app",
+            "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms',variables('appPlanName'))]",
+                "siteConfig": {
+                    "windowsFxVersion": "dotnet|8.0"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', variables('appPlanName'))]"
+            ]
+         }
+        }
+    ],
+    "outputs": {}
+}
