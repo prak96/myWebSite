@@ -9,8 +9,14 @@ trigger:
 
         exclude:
         - hotfix/* 
+    batch: true
 
-    batch: true   
+pr:
+    branches:
+        include:
+        - release/*
+         
+
 variables:
   BuildConfig: 'Debug'
 
