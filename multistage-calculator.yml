@@ -88,10 +88,10 @@ stages:
               Bindings: '{
                   "bindings": [
                   {
-                    "protocol": "http",
+                    "protocol": "https",
                     "ipAddress": "All Unassigned",
-                    "port": "80",
-                    "hostname": "calculator.com",
+                    "port": "1500",
+                    "hostname": "mycalculator.com",
                     "sslThumbprint": "",
                     "sniFlag": false
                   }
@@ -256,10 +256,8 @@ stages:
     pool: server
     displayName: 'ApprovalJob'
     steps:
-    - task: ManualIntervention@8
-      displayName: 'validation with changes'
-      timeoutInMinutes: 2
-      inputs:
+      - task: ManualValidation@1
+        inputs:
+          notifyUsers: 'pratulp2580@hotmail.com'
           instructions: 'Kindly check and confirm if any changes required before CICD process'
-          emailRecipients: 'pratulp2580@hotmail.com'
-          onTimeout: 'resume'
+          onTimeout: reject
