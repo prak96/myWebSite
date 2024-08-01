@@ -199,21 +199,7 @@ stages:
   pool:
     vmName: windows-latest
   jobs:
-  - job: 'ManualApprovalNeeded'
-    pool: server
-    displayName: 'ApprovalJob'
-    steps:
-    - task: ManualIntervention@8
-      displayName: 'validation with changes'
-      timeoutInMinutes: 2
-      inputs:
-        instructions: 'Kindly check and confirm if any changes required before CICD process'
-        emailRecipients: 'pratulp2580@hotmail.com'
-        onTimeout: 'resume'
-
-
   - deployment: 'deploytoPRODvm'
-    dependsOn: 'ManualApprovalNeeded'
     environment: 
       name: "VMdepo"
       resourceType: VirtualMachine
@@ -265,3 +251,15 @@ stages:
               XmlTransformation: true
               XmlVariableSubstitution: true
 
+  - job: 'ManualApprovalNeeded'
+    dependsOn: 'deploytoPRODvm'
+    pool: server
+    displayName: 'ApprovalJob'
+    steps:
+    - task: ManualIntervention@8
+      displayName: 'validation with changes'
+      timeoutInMinutes: 2
+      inputs:
+          instructions: 'Kindly check and confirm if any changes required before CICD process'
+          emailRecipients: 'pratulp2580@hotmail.com'
+          onTimeout: 'resume'
