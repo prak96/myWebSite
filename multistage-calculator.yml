@@ -85,7 +85,18 @@ stages:
               WebsitePhysicalPath: '%SystemDrive%\inetpub\wwwroot'
               WebsitePhysicalPathAuth: 'WebsiteUserPassThrough'
               AddBinding: true
-              Bindings: '{"bindings":[{"protocol":"http","ipAddress":"All Unassigned","port":"80","hostname":"","sslThumbprint":"","sniFlag":false}]}'
+              Bindings: '{
+                  "bindings": [
+                  {
+                    "protocol": "http",
+                    "ipAddress": "All Unassigned",
+                    "port": "80",
+                    "hostname": "calculator.com",
+                    "sslThumbprint": "",
+                    "sniFlag": false
+                  }
+                ]
+              }'
               ParentWebsiteNameForApplication: 'calculatorapp'
               ParentWebsiteNameForVD: 'calculatorapp'
           
@@ -147,7 +158,18 @@ stages:
               WebsitePhysicalPath: '%SystemDrive%\inetpub\wwwroot'
               WebsitePhysicalPathAuth: 'WebsiteUserPassThrough'
               AddBinding: true
-              Bindings: '{"bindings":[{"protocol":"http","ipAddress":"All Unassigned","port":"80","hostname":"","sslThumbprint":"","sniFlag":false}]}'
+              Bindings: '{
+                "bindings": [
+                  {
+                    "protocol": "http",
+                    "ipAddress": "All Unassigned",
+                    "port": "80",
+                    "hostname": "calculator.com",
+                    "sslThumbprint": "",
+                    "sniFlag": false
+                  }
+                ]
+              }'
               ParentWebsiteNameForApplication: 'calculatorapp'
               ParentWebsiteNameForVD: 'calculatorapp'
           
@@ -209,7 +231,18 @@ stages:
               WebsitePhysicalPath: '%SystemDrive%\inetpub\wwwroot'
               WebsitePhysicalPathAuth: 'WebsiteUserPassThrough'
               AddBinding: true
-              Bindings: '{"bindings":[{"protocol":"http","ipAddress":"All Unassigned","port":"80","hostname":"","sslThumbprint":"","sniFlag":false}]}'
+              Bindings: '{
+                "bindings": [
+                  {
+                    "protocol": "http",
+                    "ipAddress": "All Unassigned",
+                    "port": "80",
+                    "hostname": "calculator.com",
+                    "sslThumbprint": "",
+                    "sniFlag": false
+                  }
+                ]
+              }'
               ParentWebsiteNameForApplication: 'calculatorapp'
               ParentWebsiteNameForVD: 'calculatorapp'
           
