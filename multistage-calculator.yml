@@ -92,7 +92,7 @@ stages:
                     "ipAddress": "All Unassigned",
                     "port": "1500",
                     "hostname": "mycalculator.com",
-                    "sslThumbprint": "your_ssl_thumbprint_here",
+                    "sslThumbprint": "ba33d9482b295efbc8c55881d301111dbde8168f",
                     "sniFlag": false
                   }
                 ]
