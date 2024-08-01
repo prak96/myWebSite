@@ -1,5 +1,5 @@
 # https://aka.ms/yaml
-
+#to check pr trigger for dev
 trigger:
     branches:
         include:
@@ -15,6 +15,9 @@ pr:
     branches:
         include:
         - release/*
+
+        exclude:
+        - dev
          
 
 variables:
