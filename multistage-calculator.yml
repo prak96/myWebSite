@@ -86,13 +86,13 @@ stages:
               WebsitePhysicalPathAuth: 'WebsiteUserPassThrough'
               AddBinding: true
               Bindings: '{
-                  "bindings": [
+                "bindings": [
                   {
                     "protocol": "https",
                     "ipAddress": "All Unassigned",
                     "port": "1500",
                     "hostname": "mycalculator.com",
-                    "sslThumbprint": "",
+                    "sslThumbprint": "your_ssl_thumbprint_here",
                     "sniFlag": false
                   }
                 ]
