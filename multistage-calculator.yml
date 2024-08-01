@@ -1,5 +1,5 @@
 # https://aka.ms/yaml
-
+#to check pr trigger for dev
 trigger:
     branches:
         include:
@@ -7,7 +7,19 @@ trigger:
         - release/*
         - dev
 
-    batch: true   
+        exclude:
+        - hotfix/* 
+    batch: true
+
+pr:
+    branches:
+        include:
+        - release/*
+
+        exclude:
+        - dev
+         
+
 variables:
   BuildConfig: 'Debug'
 
@@ -45,4 +57,4 @@ stages:
       inputs:
         ArtifactName: 'depo'
         publishLocation: Container
-        TargetPath: $(Build.ArtifactsDirectory)
+        PathtoPublish: $(Build.ArtifactsDirectory)
