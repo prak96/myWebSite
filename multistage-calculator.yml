@@ -7,7 +7,16 @@ trigger:
         - release/*
         - dev
 
-    batch: true   
+        exclude:
+        - hotfix/* 
+    batch: true
+
+pr:
+    branches:
+        include:
+        - release/*
+         
+
 variables:
   BuildConfig: 'Debug'
 
@@ -45,4 +54,4 @@ stages:
       inputs:
         ArtifactName: 'depo'
         publishLocation: Container
-        TargetPath: $(Build.ArtifactsDirectory)
+        PathtoPublish: $(Build.ArtifactsDirectory)
