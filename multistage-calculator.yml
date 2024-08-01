@@ -59,3 +59,173 @@ stages:
         ArtifactName: 'depo'
         publishLocation: Container
         PathtoPublish: $(Build.ArtifactsDirectory)
+
+- stage: Testing
+  displayName: "test stage"
+  dependsOn: CIBuild
+  pool:
+    vmName: windows-latest
+  jobs:
+  - deployment: 'deploytoTestVM'
+    environment: 
+      name: "VMdepo"
+      resourceType: VirtualMachine
+      tags: test
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: IISWebAppManagementOnMachineGroup@0
+            inputs:
+              EnableIIS: true
+              IISDeploymentType: 'IISWebsite'
+              ActionIISWebsite: 'CreateOrUpdateWebsite'
+              WebsiteName: 'calculatorapp'
+              WebsitePhysicalPath: '%SystemDrive%\inetpub\wwwroot'
+              WebsitePhysicalPathAuth: 'WebsiteUserPassThrough'
+              AddBinding: true
+              Bindings: '{"bindings":[{"protocol":"http","ipAddress":"All Unassigned","port":"80","hostname":"","sslThumbprint":"","sniFlag":false}]}'
+              ParentWebsiteNameForApplication: 'calculatorapp'
+              ParentWebsiteNameForVD: 'calculatorapp'
+          
+          - task: PowerShell@2
+            displayName: 'PowerShell script for ASP.NET'
+            inputs:
+              targetType: 'inline'
+              script: |
+                # Write your PowerShell commands here.
+                Invoke-WebRequest "https://download.visualstudio.microsoft.com/download/pr/7d169ca8-2755-4870-b45c-bfc651013a77/46639ef8e327f00ab1a941288dd28abe/dotnet-hosting-8.0.7-win.exe" -OutFile  $env:temp\DotNetCore.WindowsHosting.exe
+                Start-Process $env:temp\DotNetCore.WindowsHosting.exe -ArgumentList '/quiet' -Wait
+              errorActionPreference: 'silentlyContinue'
+
+          - task: IISWebAppDeploymentOnMachineGroup@0
+            displayName: 'iis webapp hosting from buildArtifact'
+            inputs:
+              WebSiteName: 'calculatorapp'
+              Package: '$(Pipeline.Workspace)\**\*.zip'
+              TakeAppOfflineFlag: true
+              XmlTransformation: true
+              XmlVariableSubstitution: true
+
+
+- stage: Development
+  displayName: "dev stage"
+  dependsOn: CIBuild
+  pool:
+    vmName: windows-latest
+  jobs:
+  - job: 'ManualApprovalNeeded'
+    pool: server
+    displayName: 'ApprovalJob'
+    timeoutInMinutes: 3
+    steps:
+    - task: ManualValidation@1
+      displayName: 'Approval'
+      inputs:
+        notifyUsers: 'pratulp2580@hotmail.com'
+        onTimeout: reject
+
+
+  - deployment: 'deploytoDEVvm'
+    dependsOn: 'ManualApprovalNeeded'
+    environment: 
+      name: "VMdepo"
+      resourceType: VirtualMachine
+      tags: dev
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: IISWebAppManagementOnMachineGroup@0
+            inputs:
+              EnableIIS: true
+              IISDeploymentType: 'IISWebsite'
+              ActionIISWebsite: 'CreateOrUpdateWebsite'
+              WebsiteName: 'calculatorapp'
+              WebsitePhysicalPath: '%SystemDrive%\inetpub\wwwroot'
+              WebsitePhysicalPathAuth: 'WebsiteUserPassThrough'
+              AddBinding: true
+              Bindings: '{"bindings":[{"protocol":"http","ipAddress":"All Unassigned","port":"80","hostname":"","sslThumbprint":"","sniFlag":false}]}'
+              ParentWebsiteNameForApplication: 'calculatorapp'
+              ParentWebsiteNameForVD: 'calculatorapp'
+          
+          - task: PowerShell@2
+            displayName: 'PowerShell script for ASP.NET'
+            inputs:
+              targetType: 'inline'
+              script: |
+                # Write your PowerShell commands here.
+                Invoke-WebRequest "https://download.visualstudio.microsoft.com/download/pr/7d169ca8-2755-4870-b45c-bfc651013a77/46639ef8e327f00ab1a941288dd28abe/dotnet-hosting-8.0.7-win.exe" -OutFile  $env:temp\DotNetCore.WindowsHosting.exe
+                Start-Process $env:temp\DotNetCore.WindowsHosting.exe -ArgumentList '/quiet' -Wait
+              errorActionPreference: 'silentlyContinue'
+
+          - task: IISWebAppDeploymentOnMachineGroup@0
+            displayName: 'iis webapp hosting from buildArtifact'
+            inputs:
+              WebSiteName: 'calculatorapp'
+              Package: '$(Pipeline.Workspace)\**\*.zip'
+              TakeAppOfflineFlag: true
+              XmlTransformation: true
+              XmlVariableSubstitution: true
+
+- stage: Production
+  displayName: "prod stage"
+  dependsOn: CIBuild
+  pool:
+    vmName: windows-latest
+  jobs:
+  - job: 'ManualApprovalNeeded'
+    pool: server
+    displayName: 'ApprovalJob'
+    steps:
+    - task: ManualIntervention@8
+      displayName: 'validation with changes'
+      timeoutInMinutes: 2
+      inputs:
+        instructions: 'Kindly check and confirm if any changes required before CICD process'
+        emailRecipients: 'pratulp2580@hotmail.com'
+        onTimeout: 'resume'
+
+
+  - deployment: 'deploytoPRODvm'
+    dependsOn: 'ManualApprovalNeeded'
+    environment: 
+      name: "VMdepo"
+      resourceType: VirtualMachine
+      tags: prod
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: IISWebAppManagementOnMachineGroup@0
+            inputs:
+              EnableIIS: true
+              IISDeploymentType: 'IISWebsite'
+              ActionIISWebsite: 'CreateOrUpdateWebsite'
+              WebsiteName: 'calculatorapp'
+              WebsitePhysicalPath: '%SystemDrive%\inetpub\wwwroot'
+              WebsitePhysicalPathAuth: 'WebsiteUserPassThrough'
+              AddBinding: true
+              Bindings: '{"bindings":[{"protocol":"http","ipAddress":"All Unassigned","port":"80","hostname":"","sslThumbprint":"","sniFlag":false}]}'
+              ParentWebsiteNameForApplication: 'calculatorapp'
+              ParentWebsiteNameForVD: 'calculatorapp'
+          
+          - task: PowerShell@2
+            displayName: 'PowerShell script for ASP.NET'
+            inputs:
+              targetType: 'inline'
+              script: |
+                # Write your PowerShell commands here.
+                Invoke-WebRequest "https://download.visualstudio.microsoft.com/download/pr/7d169ca8-2755-4870-b45c-bfc651013a77/46639ef8e327f00ab1a941288dd28abe/dotnet-hosting-8.0.7-win.exe" -OutFile  $env:temp\DotNetCore.WindowsHosting.exe
+                Start-Process $env:temp\DotNetCore.WindowsHosting.exe -ArgumentList '/quiet' -Wait
+              errorActionPreference: 'silentlyContinue'
+
+          - task: IISWebAppDeploymentOnMachineGroup@0
+            displayName: 'iis webapp hosting from buildArtifact'
+            inputs:
+              WebSiteName: 'calculatorapp'
+              Package: '$(Pipeline.Workspace)\**\*.zip'
+              TakeAppOfflineFlag: true
+              XmlTransformation: true
+              XmlVariableSubstitution: true
+
