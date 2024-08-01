@@ -1,0 +1,33 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "projectName": {
+            "value": "webpools"
+        },
+        "storageName": {
+            "value": "prak233"
+        },
+        "vnetAddressPrefix": {
+            "value": "172.21.0.0/16"
+        },
+        "vmLoop": {
+            "value": 3
+        },
+        "vmOffer": {
+            "value": "WindowsServer"
+        },
+        "vmSku": {
+            "value": "2022-datacenter-azure-edition"
+        },
+         "vmPublisher": {
+             "value": "MicrosoftWindowsServer"
+         },
+         "vmUsername": {
+             "value": "pratul"
+         },
+         "vmPassword": {
+             "value": "coforge@1234"
+         }
+    }
+}
