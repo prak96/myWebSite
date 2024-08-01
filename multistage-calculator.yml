@@ -18,6 +18,7 @@ pr:
 
         exclude:
         - dev
+        - main
          
 
 variables:
