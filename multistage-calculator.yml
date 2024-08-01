@@ -45,4 +45,4 @@ stages:
       inputs:
         ArtifactName: 'depo'
         publishLocation: Container
-        TargetPath: $(Build.ArtifactsDirectory)
+        PathtoPublish: $(Build.ArtifactsDirectory)
