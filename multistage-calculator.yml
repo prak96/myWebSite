@@ -56,7 +56,7 @@ stages:
     - task: PublishBuildArtifacts@1
       displayName: 'publish artifact task'
       inputs:
-        ArtifactName: 'depo'
+        ArtifactName: 'mycalculatorapp'
         publishLocation: Container
         PathtoPublish: $(Build.ArtifactsDirectory)
 
@@ -76,45 +76,45 @@ stages:
       runOnce:
         deploy:
           steps:
-          - task: IISWebAppManagementOnMachineGroup@0
-            inputs:
-              EnableIIS: true
-              IISDeploymentType: 'IISWebsite'
-              ActionIISWebsite: 'CreateOrUpdateWebsite'
-              WebsiteName: 'calculatorapp'
-              WebsitePhysicalPath: '%SystemDrive%\inetpub\wwwroot'
-              WebsitePhysicalPathAuth: 'WebsiteUserPassThrough'
-              AddBinding: true
-              Bindings: '{
-                "bindings": [
-                  {
-                    "protocol": "https",
-                    "ipAddress": "All Unassigned",
-                    "port": "1500",
-                    "hostname": "mycalculator.com",
-                    "sslThumbprint": "ba33d9482b295efbc8c55881d301111dbde8168f",
-                    "sniFlag": false
-                  }
-                ]
-              }'
-              ParentWebsiteNameForApplication: 'calculatorapp'
-              ParentWebsiteNameForVD: 'calculatorapp'
+          # - task: IISWebAppManagementOnMachineGroup@0
+          #   inputs:
+          #     EnableIIS: true
+          #     IISDeploymentType: 'IISWebsite'
+          #     ActionIISWebsite: 'CreateOrUpdateWebsite'
+          #     WebsiteName: 'calculatorapp'
+          #     WebsitePhysicalPath: '%SystemDrive%\inetpub\wwwroot'
+          #     WebsitePhysicalPathAuth: 'WebsiteUserPassThrough'
+          #     AddBinding: true
+          #     Bindings: '{
+          #       "bindings": [
+          #         {
+          #           "protocol": "https",
+          #           "ipAddress": "All Unassigned",
+          #           "port": "1500",
+          #           "hostname": "mycalculator.com",
+          #           "sslThumbprint": "ba33d9482b295efbc8c55881d301111dbde8168f",
+          #           "sniFlag": false
+          #         }
+          #       ]
+          #     }'
+          #     ParentWebsiteNameForApplication: 'calculatorapp'
+          #     ParentWebsiteNameForVD: 'calculatorapp'
           
-          - task: PowerShell@2
-            displayName: 'PowerShell script for ASP.NET'
-            inputs:
-              targetType: 'inline'
-              script: |
-                # Write your PowerShell commands here.
-                Invoke-WebRequest "https://download.visualstudio.microsoft.com/download/pr/7d169ca8-2755-4870-b45c-bfc651013a77/46639ef8e327f00ab1a941288dd28abe/dotnet-hosting-8.0.7-win.exe" -OutFile  $env:temp\DotNetCore.WindowsHosting.exe
-                Start-Process $env:temp\DotNetCore.WindowsHosting.exe -ArgumentList '/quiet' -Wait
-              errorActionPreference: 'silentlyContinue'
+          # - task: PowerShell@2
+          #   displayName: 'PowerShell script for ASP.NET'
+          #   inputs:
+          #     targetType: 'inline'
+          #     script: |
+          #       # Write your PowerShell commands here.
+          #       Invoke-WebRequest "https://download.visualstudio.microsoft.com/download/pr/7d169ca8-2755-4870-b45c-bfc651013a77/46639ef8e327f00ab1a941288dd28abe/dotnet-hosting-8.0.7-win.exe" -OutFile  $env:temp\DotNetCore.WindowsHosting.exe
+          #       Start-Process $env:temp\DotNetCore.WindowsHosting.exe -ArgumentList '/quiet' -Wait
+          #     errorActionPreference: 'silentlyContinue'
 
           - task: IISWebAppDeploymentOnMachineGroup@0
             displayName: 'iis webapp hosting from buildArtifact'
             inputs:
               WebSiteName: 'calculatorapp'
-              Package: '$(Pipeline.Workspace)\**\*.zip'
+              Package: '$(Pipeline.Workspace)/mycalculatorapp/*.zip'
               TakeAppOfflineFlag: true
               XmlTransformation: true
               XmlVariableSubstitution: true
