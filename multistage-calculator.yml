@@ -62,6 +62,7 @@ stages:
 
 - stage: Testing
   displayName: "test stage"
+  condition: contains(variables['Build.SourceBranch'],'refs/heads/release/')
   dependsOn: CIBuild
   pool:
     vmName: windows-latest
@@ -110,6 +111,7 @@ stages:
 
 - stage: Development
   displayName: "dev stage"
+  condition: eq(variables['Build.SourceBranch'],'refs/heads/dev')
   dependsOn: CIBuild
   pool:
     vmName: windows-latest
@@ -170,6 +172,7 @@ stages:
 
 - stage: Production
   displayName: "prod stage"
+  condition: eq(variables['Build.SourceBranch'],'refs/heads/main')
   dependsOn: CIBuild
   pool:
     vmName: windows-latest
