@@ -1,0 +1,43 @@
+# https://aka.ms/yaml
+
+trigger:
+- none
+
+variables:
+  BuildConfig: 'Debug'
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+- stage: CIBuild
+  jobs:
+  - job: BuildJob
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: 'restore task'
+      inputs:
+        command: restore
+        projects: $(ProjectName)
+        feedsToUse: select
+    
+    - task: DotNetCoreCLI@2
+      displayName: 'build task'
+      inputs:
+        command: build
+        projects: $(projectName)
+        arguments: -c $(BuildConfig)
+
+    - task: DotNetCoreCLI@2
+      displayName: 'publish task'
+      inputs:
+        command: publish
+        projects: $(ProjectName)
+        arguments: -c $(buildConfig) -o $(Build.ArtifactsDirectory)
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'publish artifact task'
+      inputs:
+        ArtifactName: 'depo'
+        publishLocation: Container
+        TargetPath: $(Build.ArtifactsDirectory)
