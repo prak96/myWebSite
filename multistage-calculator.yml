@@ -1,5 +1,5 @@
 # https://aka.ms/yaml
-#this is to test for hotfix CI
+#this is to test for hotfix pr
 trigger:
     branches:
         include:
