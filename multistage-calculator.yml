@@ -1,13 +1,18 @@
 # https://aka.ms/yaml
 
 trigger:
-- none
+    branches:
+        include:
+        - main
+        - release/*
+        - dev
 
+    batch: true   
 variables:
   BuildConfig: 'Debug'
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: windows-latest
 
 stages:
 - stage: CIBuild
