@@ -28,12 +28,14 @@ stages:
   - job: TestJob
     displayName: 'deploy in Test env'
     steps:
-    - task: DownloadPipelineArtifact@2
-      displayName: 'download pipeline artifact'
+    - task: DownloadBuildArtifacts@1
+      displayName: 'download build artifact'
       inputs:
         buildType: 'current'
+        downloadType: 'single'
         artifactName: 'artifact'
-        targetPath: '$(Pipeline.Workspace)/**/*.zip'
+        downloadPath: '$(Pipeline.Workspace)/**/*.zip'
+        cleanDestinationFolder: true
         
 
 
