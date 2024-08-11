@@ -2,7 +2,7 @@
 trigger:
     branches:
         include:
-        - hotfix/*
+        - none
 
         exclude:
         - main
@@ -25,7 +25,7 @@ stages:
 
 - stage: CDStage
   jobs:
-  - job: TestJob
+  - job: 'DownloadArtifact'
     displayName: 'deploy in Test env'
     steps:
     - task: DownloadBuildArtifacts@1
