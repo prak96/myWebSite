@@ -1,1 +1,30 @@
+#main Template
+trigger:
+    branches:
+        include:
+        - hotfix/*
+
+        exclude:
+        - main
+        - dev
+        - release/*
+
+    batch: true
+
+stages:
+- stage: CIStage
+  pool:
+    vmImage: ubuntu-latest
+    
+  jobs:
+  - job: buildJob
+    steps:
+    - template: /yaml/multistage-Buildtemplate.yaml
+      parameters:
+          buildconfig: release
+
+
+
+
+      
 
