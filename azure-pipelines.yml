@@ -3,25 +3,16 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
-trigger:
-  branches:
-    include:
-    - release/*
-    - hotfix/*
+parameters:
+- name: 'project'
+  displayName: 'project path'
+  default: '**/*.csproj'
 
-    exclude:
-    - main
-    - dev
+- name: 'buildconfig'
+  displayName: 'build configuration name'
+  default: 'debug'
 
-  batch: true
-
-stages:
-- stage: CIstage
-  jobs:
-  - job: BuildJob
-    pool:
-      vmImage: windows-latest
-    steps:
+steps:
     - task: DotNetCoreCLI@2
       displayName: 'restore task'
       inputs:
@@ -50,3 +41,4 @@ stages:
         ArtifactName: artifact
         publishLocation: Container
         PathtoPublish: $(build.artifactsdirectory)
+
