@@ -1,0 +1,56 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+  batch: true
+  branches:
+    include:
+    - hotfix/*
+
+    exclude:
+    - main
+    - dev
+    - release/* 
+
+pr:
+  branches:
+    include:
+    - release/*
+
+jobs:
+- job: BuildJob
+  pool:
+    vmImage: ubuntu-latest
+  steps:
+  - task: DotNetCoreCLI@2
+    displayName: 'restore task'
+    inputs:
+      projects: $(projectName)
+      command: restore
+      feedsToUse: select
+    
+  - task: DotNetCoreCLI@2
+    displayName: 'build task'
+    inputs:
+      command: build
+      projects: $(projectName)
+      arguments: -c $(buildConfig)
+  
+  - task: DotNetCoreCLI@2
+    displayName: 'publish task'
+    inputs:
+      command: publish
+      projects: $(projectName)
+      zipAfterPublish: true
+      arguments: -c $(buildConfig) -o $(build.artifactsdirectory)
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'artifact publish task'
+    inputs:
+      ArtifactName: 'artifact'
+      publishLocation: Container
+      TargetPath: $(build.artifactsdirectory)
+      
+
