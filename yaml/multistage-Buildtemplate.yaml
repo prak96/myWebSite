@@ -30,7 +30,7 @@ steps:
       inputs:
         command: publish
         projects: '${{parameters.project}}'
-        arguments: '-c ${{parameters.buildconfig}} -o $(build.artifactsdirectory)'
+        arguments: '-c ${{parameters.buildconfig}} -o $(build.artifactsdirectory)/${{parameters.buildconfig}}'
 
 
     - task: PublishBuildArtifacts@1
