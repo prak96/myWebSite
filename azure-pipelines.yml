@@ -4,16 +4,49 @@
 # https://aka.ms/yaml
 
 trigger:
-- main
+  branches:
+    include:
+    - release/*
+    - hotfix/*
 
-pool:
-  vmImage: ubuntu-latest
+    exclude:
+    - main
+    - dev
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+  batch: true
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+stages:
+- stage: CIstage
+  jobs:
+  - job: BuildJob
+    pool:
+      vmImage: windows-latest
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: 'restore task'
+      inputs:
+        command: restore
+        projects: $(project)
+        feedsToUse: select
+
+    - task: DotNetCoreCLI@2
+      displayName: 'build task'
+      inputs:
+        command: build
+        projects: $(project)
+        arguments: -c $(buildConfig)
+    
+    - task: DotNetCoreCLI@2
+      displayName: 'publish task'
+      inputs:
+        command: publish
+        projects: $(project)
+        arguments: -c $(buildConfig) -o $(build.artifactsdirectory)
+
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'publish artifact task'
+      inputs:
+        ArtifactName: artifact
+        publishLocation: Container
+        PathtoPublish: $(build.artifactsdirectory)
