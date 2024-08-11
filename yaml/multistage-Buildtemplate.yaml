@@ -1,5 +1,3 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
@@ -17,22 +15,22 @@ steps:
       displayName: 'restore task'
       inputs:
         command: restore
-        projects: $(project)
+        projects: ${{parameter.project}}
         feedsToUse: select
 
     - task: DotNetCoreCLI@2
       displayName: 'build task'
       inputs:
         command: build
-        projects: $(project)
-        arguments: -c $(buildConfig)
+        projects: '${{parameter.project}}'
+        arguments: -c '${{parameter.buildconfig}}'
     
     - task: DotNetCoreCLI@2
       displayName: 'publish task'
       inputs:
         command: publish
-        projects: $(project)
-        arguments: -c $(buildConfig) -o $(build.artifactsdirectory)
+        projects: '${{parameter.project}}'
+        arguments: -c '${{parameter.buildconfig}}' -o $(build.artifactsdirectory)
 
 
     - task: PublishBuildArtifacts@1
