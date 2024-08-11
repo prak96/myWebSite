@@ -21,7 +21,7 @@ stages:
     steps:
     - template: /yaml/multistage-Buildtemplate.yaml
       parameters:
-          buildconfig: release
+          buildconfig: 'release'
 
 
 
