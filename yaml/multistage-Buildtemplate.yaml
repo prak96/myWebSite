@@ -1,7 +1,7 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
-parameters:
+parameterss:
 - name: 'project'
   displayName: 'project path'
   default: '**/*.csproj'
@@ -15,22 +15,22 @@ steps:
       displayName: 'restore task'
       inputs:
         command: restore
-        projects: ${{parameter.project}}
+        projects: ${{parameters.project}}
         feedsToUse: select
 
     - task: DotNetCoreCLI@2
       displayName: 'build task'
       inputs:
         command: build
-        projects: '${{parameter.project}}'
-        arguments: -c '${{parameter.buildconfig}}'
+        projects: '${{parameters.project}}'
+        arguments: -c '${{parameters.buildconfig}}'
     
     - task: DotNetCoreCLI@2
       displayName: 'publish task'
       inputs:
         command: publish
-        projects: '${{parameter.project}}'
-        arguments: -c '${{parameter.buildconfig}}' -o $(build.artifactsdirectory)
+        projects: '${{parameters.project}}'
+        arguments: -c '${{parameters.buildconfig}}' -o $(build.artifactsdirectory)
 
 
     - task: PublishBuildArtifacts@1
