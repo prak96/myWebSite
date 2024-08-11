@@ -23,7 +23,18 @@ stages:
       parameters:
           buildconfig: 'release'
 
-
+- stage: CDStage
+  jobs:
+  - job: TestJob
+    displayName: 'deploy in Test env'
+    steps:
+    - task: DownloadPipelineArtifact@2
+      displayName: 'download pipeline artifact'
+      inputs:
+        buildType: 'current'
+        artifactName: 'artifact'
+        targetPath: '$(Pipeline.Workspace)/**/*.zip'
+        
 
 
       
