@@ -12,7 +12,7 @@
             "value": "172.21.0.0/16"
         },
         "vmLoop": {
-            "value": 3
+            "value": 2
         },
         "vmOffer": {
             "value": "WindowsServer"

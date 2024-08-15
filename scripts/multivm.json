@@ -12,8 +12,7 @@
         },
         "vmLoop": {
             "type": "int",
-            "defaultValue":1,
-            "minValue": 3
+            "defaultValue":1
         },
         "vnetAddressPrefix": {
             "type": "string"
