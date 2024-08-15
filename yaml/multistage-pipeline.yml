@@ -2,7 +2,7 @@
 trigger:
     branches:
         include:
-        - hotfix/*
+        - none
 
         exclude:
         - main
@@ -21,10 +21,21 @@ stages:
     steps:
     - template: /yaml/multistage-Buildtemplate.yaml
       parameters:
-          buildconfig: release
+          buildconfig: 'release'
 
-
-
+- stage: CDStage
+  jobs:
+  - job: 'DownloadArtifact'
+    displayName: 'deploy in Test env'
+    steps:
+    - task: DownloadBuildArtifacts@1
+      displayName: 'download build artifact'
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'artifact'
+        downloadPath: '$(System.ArtifactsDirectory)/**/*.zip'
+        cleanDestinationFolder: true
 
       
 
