@@ -1,0 +1,23 @@
+#restore,build&publish pipeline
+#reference pipeline
+
+parameters:
+- name: 'buildConfig'
+  values:
+  - debug 
+  
+##CI Build
+steps:
+- task: DotNetCoreCLI@2   ##release
+  displayName: release
+  inputs:
+    command: restore
+    projects: '**/*.csproj'
+    
+- task: DotNetCoreCLI@2
+  displayName: 'build'
+  inputs:
+    command: build
+    projects: '**/*.csproj'
+    arguments: '--configuration '
+    
