@@ -1,2 +1,17 @@
-trigger
+trigger:
 - none
+
+pool:
+ vmImage: 'windows-latest'
+
+steps:
+- template: 'reference-pipeline.yml'
+  parameters:
+    buildConfig: 'debug'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+   PathtoPublish: '${build.StagingDirectory}'
+   ArtifactName: 'drop'
+   publishLocation: 'Container'
+
