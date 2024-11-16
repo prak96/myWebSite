@@ -1,11 +1,11 @@
 trigger:
-- none
+  branches:
+    exclude:
+    - main 
 
-pool:
- vmImage: 'windows-latest'
 
 steps:
-- template: 'reference-pipeline.yml'
+- template: 'buildp.yml'
   parameters:
     buildConfig: 'debug'
 
