@@ -1,6 +1,7 @@
 #restore,build&publish pipeline
 #reference pipeline
-
+trigger:
+- none
 
 ##CI Build
 steps:
