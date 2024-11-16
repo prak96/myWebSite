@@ -3,6 +3,8 @@ trigger:
     include:
     - none
 
+pool:
+  vmImage: 'windows-latest'
 
 steps:
 - template: 'buildp.yml'
